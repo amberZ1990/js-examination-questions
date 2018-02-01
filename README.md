@@ -21,7 +21,69 @@
   }
   fun();
   ```
-  
+
+#1-3 答案
+```js
+
+forEach函数
+
+let forEachCustom = function (callback, args) {
+    let T,
+        k;
+    if (this === null) {
+        throw new TypeError('this is null');
+    }
+    let o = Object(args);
+    let len = o.length >>> 0;
+    if (typeof callback !== 'function') {
+        throw new TypeError(callback + 'is not a function');
+    }
+    if (arguments.length > 1) {
+        T = args;
+    }
+    k = 0;
+    while (k < len) {
+        let kValue;
+        if (k in o) {
+            kValue = o[k];
+            console.log(k);
+            console.log(kValue);
+            callback(k, kValue);
+        }
+        k++;
+    }
+}
+let arr = [1, 2, 3];
+forEachCustom((a, b) => {
+    console.log(a);
+    console.log(b);
+}, arr);
+
+第二题
+let copy = function (arr): any {
+    return JSON.parse(JSON.stringify(arr));
+}
+
+let a = [{
+    a: 1,
+    b: 'bb'
+}];
+let b = copy(a);
+b[0].a = 10;
+console.log(a);
+console.log(b);
+
+第三题
+undefined
+1
+1
+1
+1
+undefined
+2
+undefined
+
+```
  4.[附加题1] 请用观察者模式实现下面的自定义事件Event对象的接口，功能见注释，	该Event对象的接口需要能被其他对象拓展复用。
   ```js
   Event.on('test', function (result) {
@@ -57,7 +119,78 @@
       }
   };
   ```
-  
+> ### 第四题答案 
+>> [原题答案地址](https://www.cnblogs.com/LuckyWinty/p/5796190.html)
+
+```js
+
+function getType(obj) {
+    var toString = Object.prototype.toString;
+    var map = {
+        '[object Boolean]': 'boolean',
+        '[object Number]': 'number',
+        '[object String]': 'string',
+        '[object Function]': 'function',
+        '[object Array]': 'array',
+        '[object Date]': 'date',
+        '[object RegExp]': 'regExp',
+        '[object Undefined]': 'undefined',
+        '[object Null]': 'null',
+        '[object Object]': 'object'
+    };
+    if (obj instanceof Element) {
+        return 'element';
+    }
+    return map[toString.call(obj)];
+}
+
+let deepClone = function (data) {
+    var type = getType(data);
+    var obj;
+    if (type === 'array') {
+        obj = [];
+    } else if (type === 'object') {
+        obj = {};
+    } else {
+        //不再具有下一层次
+        return data;
+    }
+    if (type === 'array') {
+        for (var i = 0, len = data.length; i < len; i++) {
+            obj.push(deepClone(data[i]));
+        }
+    } else if (type === 'object') {
+        for (var key in data) {
+            obj[key] = deepClone(data[key]);
+        }
+    }
+    return obj;
+}
+
+let b = deepClone(a);
+b[0].a = 10;
+console.log(a);
+console.log(b);
+```
+
+```js
+/**
+ * FileReader简单封装
+ * @param file 传入的文件
+ */
+pro_reader(file): Promise < any > {
+    return new Promise((resolve, reject) => {
+        let render = new FileReader();
+        render.onload = () => {
+            resolve(render);
+        }
+        render.onerror = reject;
+    })
+}
+
+```  
+
+
  5.[附加题2] 用ES6标准的Promise将下面代码中的FileReader部分封装起来，请写出	Promise封装的实现代码（即pro_reader函数的实现代码）。
   封装前的代码为：
   ```js
@@ -96,4 +229,22 @@
   }
   ```
     
-  
+> ### 第五题答案
+
+```js
+
+/**
+ * FileReader简单封装
+ * @param file 传入的文件
+ */
+pro_reader(file): Promise < any > {
+    return new Promise((resolve, reject) => {
+        let render = new FileReader();
+        render.onload = () => {
+            resolve(render);
+        }
+        render.onerror = reject;
+    })
+}
+
+```  
